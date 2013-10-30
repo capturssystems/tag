@@ -1,0 +1,49 @@
+<?php include("get_mailing.php") ?>
+
+<html lang="fr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" />
+    <title>Tag Alpha</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+	<script type="text/javascript" src="jquery-2.0.2.min.js"></script>	
+</head>
+  
+<body>
+<div id="content">
+	<div id="general" class="row-fluid">
+		<div class="text-center span12">
+			<form id="form_send">
+				<legend>Send a message</legend>                 
+				<textarea id="form_message" name="form_message">your message</textarea>
+				<BR>
+				<input id="form_send_button" type="submit" value="Send" class="btn btn-primary">
+			</form>
+			<div>
+			<div id="result"></div>
+	</div>
+</div>
+
+<SCRIPT language="Javascript">
+
+// Detect form submit
+$('#form_send').submit(function(e){
+			e.preventDefault(); // de-activate hmtl action of the form
+			Send_message(); // launch cusutom submit action
+		})
+
+
+// Function send message
+function Send_message(){	
+	// definition of ajax data
+	var L_file_ajax = "ajax/send_message.php";
+	var L_data = {};
+	L_data['message']=L_message = $('#form_message').val();
+	
+	// ajax request
+	var jqxhr = $	.ajax({type:"GET",url:L_file_ajax,data:L_data})
+					.done(function(IN_result){$('#result').text("Message sent successfully!");})
+					.fail(function(){$('#result').text("Message sending failed !");})
+}
+</SCRIPT>
+</body>
+</html>			
