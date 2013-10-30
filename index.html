@@ -1,11 +1,10 @@
-<?php include("get_mailing.php") ?>
-
 <html lang="fr">
 <head>
 	<meta http-equiv="Content-Type" content="text/html" />
     <title>Tag Alpha</title>
     <link rel="stylesheet" href="bootstrap.min.css">
 	<script type="text/javascript" src="jquery-2.0.2.min.js"></script>	
+	<script type="text/javascript" src="jquery.mobile-1.4.0-rc.1.min.js"></script>	
 </head>
   
 <body>
@@ -18,12 +17,26 @@
 				<BR>
 				<input id="form_send_button" type="submit" value="Send" class="btn btn-primary">
 			</form>
-			<div>
 			<div id="result"></div>
+			<div>Latitude: <span id="lat"></span><BR>Longitude: <span id="lgn"></span></div>
+		</div>
 	</div>
 </div>
 
 <SCRIPT language="Javascript">
+
+// Get position
+navigator.geolocation.getCurrentPosition (function (pos)
+{
+	var latitude = pos.coords.latitude;
+	var longitude = pos.coords.longitude;
+});
+
+// Display position
+function Display_position(){
+	$("#lat").text(latitude);
+	$("#lng").text(longitude);
+}
 
 // Detect form submit
 $('#form_send').submit(function(e){
@@ -44,6 +57,7 @@ function Send_message(){
 					.done(function(IN_result){$('#result').text("Message sent successfully!");})
 					.fail(function(){$('#result').text("Message sending failed !");})
 }
+
 </SCRIPT>
 </body>
 </html>			
