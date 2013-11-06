@@ -111,6 +111,7 @@ function Send_message(){
 
 // ---- Main ---- //
 // Init
+document.addEventListener("deviceready", onDeviceReady, false);
 jQuery(window).ready(function(){
 	Search_position();
 	google.maps.event.addDomListener(window, 'load', Init_maps);
