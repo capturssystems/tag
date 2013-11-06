@@ -26,7 +26,7 @@
 				<textarea id="form_message" name="form_message">your message</textarea>
 				<BR>
 				<input id="form_send_button" type="submit" value="Send" class="btn btn-primary" style="display:none;">
-				<!--<div><input id="form_test_button" value="Test position" class="btn btn-primary">-->
+				<div><input id="form_test_button" value="Test position" class="btn btn-primary">
 			</form>
 			<div id="wait">Wait, position search ...</div>
 			<div id="invalid" style="display:none;">Navigator not compatible with geolocalisation !</div>
@@ -120,9 +120,10 @@ $('#form_send').submit(function(e){
 		
 // Test position found
 $('#form_test_button').click(function(){
+	alert('toto'+latitude);
 	latitude = 43.64;
 	longitude = 1.45;
-	Enable_position();
+	//Enable_position();
 });
 
 
