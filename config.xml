@@ -7,6 +7,9 @@
     <author email="mail@ludoviclesieur.com" href="">
         Ludovic
     </author>
+    <feature name="Geolocation">
+    <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
+</feature>
     <content src="index.html" />
     <access origin="*" />
     <preference name="fullscreen" value="true" />
