@@ -59,6 +59,7 @@ function Search_position(){
 	// Search with html5 method
 	if(navigator.geolocation){
 		console.log("geolocalization well managed !");
+		alert("try compute pos");
 		navigator.geolocation.getCurrentPosition(Position_found, Position_error_handler);
 	}
 	else{
@@ -74,6 +75,7 @@ function Position_found(position){
 	// Definition with html5 method
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
+	alert('pos found');
 	Enable_position();
 }
 
@@ -87,6 +89,8 @@ function Enable_position(){
 
 function Position_error_handler(error){
 	console.log("position not found:"+error.code);
+	alert("fail compute pos");
+
 }
 
 // Function send message
@@ -120,6 +124,7 @@ $('#form_send').submit(function(e){
 		
 // Test position found
 $('#form_test_button').click(function(){
+	
 	alert('toto'+latitude);
 	latitude = 43.64;
 	longitude = 1.45;
