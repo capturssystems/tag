@@ -4,7 +4,6 @@
     <title>Tag Alpha</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 	<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>	
-	<script type="text/javascript" src="js/cordova.js"></script>	
 	<!--<script type="text/javascript" src="js/jquery.mobile-1.4.0-rc.1.min.js"></script>	-->
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=true"></script>
 	<script language="Javascript">
@@ -112,8 +111,10 @@ function Send_message(){
 
 // ---- Main ---- //
 // Init
+document.addEventListener("deviceready", Search_position, false);
+
 jQuery(window).ready(function(){
-	Search_position();
+	//Search_position();
 	google.maps.event.addDomListener(window, 'load', Init_maps);
 });
 
