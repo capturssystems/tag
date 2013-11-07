@@ -61,7 +61,7 @@ function Search_position(){
 	if(navigator.geolocation){
 		console.log("geolocalization well managed !");
 		alert("try compute pos");
-		navigator.geolocation.getCurrentPosition(Position_found, Position_error_handler);
+		navigator.geolocation.getCurrentPosition(Position_found, Position_error_handler,{timeout: 5000,enableHighAccuracy: true });
 	}
 	else{
 		console.log("geolocalization not managed !");
