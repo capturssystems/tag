@@ -8,10 +8,14 @@
         Ludovic
     </author>
     <feature name="Geolocation">
-    <param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
-</feature>
+    	<param name="android-package" value="org.apache.cordova.geolocation.GeoBroker" />
+	</feature>
+	    <gap:plugin name="Geolocation" value="org.apache.cordova.core.GeoBroker" />
+	<feature name="http://api.phonegap.com/1.0/geolocation"/>
+
     <content src="index.html" />
     <access origin="*" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
+    <preference name="phonegap-version" value="3.1.0" />
 </widget>
