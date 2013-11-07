@@ -13,7 +13,7 @@
     // PhoneGap est prêt
     //
     function onDeviceReady() {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout: 5000,enableHighAccuracy: true});
+        navigator.geolocation.getCurrentPosition(onSuccess, onError,{timeout: 3000,enableHighAccuracy: false});
     }
 
     // Fonction de callback onSuccess, reçoit un objet Position
