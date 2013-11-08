@@ -17,18 +17,18 @@ body{
 
 /* Besoin div content pour support max-div */
 #content{
-	max-width: 960px;
-	min-width:400px;
+	/*max-width: 960px;*/
+	/*min-width:400px;*/
 	margin: auto;
 }
 
 #general{
-	width: 980px;
-	height: 700px;
+	/*width: 980px;*/
+	/*height: 700px;*/
 	text-align: center;
 	background-image: url('fond.jpg');
 	background-repeat:no-repeat;
-	padding-top: 300px;
+	/*padding-top: 300px;*/
 	font-family: 'bricktown', Helvetica, Arial, sans-serif;
 	color:#f4e048;
 }
