@@ -46,7 +46,7 @@ function Search_position(){
 	console.log("search position");
 	if(navigator.geolocation){
 		console.log("geolocalization well managed !");
-		//alert("try compute pos");
+		alert("try compute pos");
 		navigator.geolocation.getCurrentPosition(Position_success, Position_fail,{timeout: 5000,enableHighAccuracy: true });
 	}
 	else{
@@ -58,12 +58,13 @@ function Search_position(){
 
 function Position_fail(error){
 	console.log("position failed:"+error.code);
-	//alert("fail compute pos");
+	alert("fail compute pos");
 	$('#wait').hide();
 	$('#invalid_2').show();
 }
 
 function Position_success(position){
+	alert("position ok");
 	console.log("position found");
 	latitude = position.coords.latitude;
 	longitude = position.coords.longitude;
@@ -96,13 +97,12 @@ function Get_markers(){
 	var L_file_ajax = "http://www.net-brothers.com/tag/ajax/get_tags.php";
 	var jqxhr = $	.ajax({type:"GET",url:L_file_ajax})
 					.done(function(IN_result){
-						$('#result').text("Tags retrieved successfully!");
 						var L_result = jQuery.parseJSON(IN_result);
 						tags = L_result["data"];
 
 						Display_markers();
 						})
-					.fail(function(){$('#result').text("Tags retrieve failed!");})
+					.fail(function(){})
 }
 
 function Display_position(){
