@@ -11,16 +11,10 @@
 		// Init variables
 		var map;
 		var pos;
-<<<<<<< HEAD
 		var longitude;
 		var latitude;
 		var accuracy;
 		var tags;
-=======
-		var longitude = 0;
-		var latitude = 0;
-		var accuracy = 0;
->>>>>>> 90046adb32ffdbac8cacada8a08b0a06a4696f0d
 	</script>
 
 </head>
@@ -89,7 +83,6 @@ function Enable_geoloc_features(){
 			center: myLocation,
 			zoom: 15
 		});
-<<<<<<< HEAD
 	
 	Get_markers();
 	Display_position();
@@ -150,11 +143,6 @@ function Display_markers(){
 	}
 }
 
-=======
-	//google.maps.event.trigger(map,'resize');
-}
-
->>>>>>> 90046adb32ffdbac8cacada8a08b0a06a4696f0d
 /*function Update_position_maps(IN_latitude,IN_longitude){
 	console.log("update position: lat="+IN_latitude+" / long="+IN_longitude);
 	myLocation = new google.maps.LatLng(IN_latitude,IN_longitude);
@@ -186,19 +174,11 @@ function Init_application(){
 	jQuery(window).ready(function(){
 		
 		// Init Position
-<<<<<<< HEAD
 		Search_position(); // DEBUG : comment
 		//longitude = 1;// DEBUG: de-comment
 		//latitude = 43;// DEBUG: de-comment
 		//accuracy = 1000;// DEBUG: de-comment
 		//Enable_geoloc_features(); //DEBUG: de-comment
-=======
-		// Search_position(); // DEBUG : comment
-		longitude = 1;// DEBUG: de-comment
-		latitude = 43;// DEBUG: de-comment
-		accuracy = 1000;// DEBUG: de-comment
-		Enable_geoloc_features(); //DEBUG: de-comment
->>>>>>> 90046adb32ffdbac8cacada8a08b0a06a4696f0d
 		
 		// Activate interactivity
 		$('#form_send').submit(function(e){
