@@ -14,20 +14,20 @@ if (!empty($_SERVER['HTTP_CLIENT_IP'])){$ip=$_SERVER['HTTP_CLIENT_IP'];}
 elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){$ip=$_SERVER['HTTP_X_FORWARDED_FOR'];}
 else{$ip=$_SERVER['REMOTE_ADDR'];}
 
+// Init result
+$table_result = array();
 
-// Get ajax input from html form request
-if(isset($_GET['message'])){$message_input = $_GET['message'];}else{$message_input="";}
-if(isset($_GET['latitude'])){$latitude = $_GET['latitude'];}else{$message_input="";}
-if(isset($_GET['longitude'])){$longitude = $_GET['longitude'];}else{$message_input="";}
-if(isset($_GET['accuracy'])){$accuracy = $_GET['accuracy'];}else{$message_input="";}
+// Read of message in database
+$result = mysql_query("SELECT id,content,latitude,longitude,accuracy,date FROM messages");
 
-// Insertion of message in database
-if($message_input != ""){$result = mysql_query("INSERT INTO messages (author,content,latitude,longitude,accuracy,ip) values ('anonymous','$message_input','$latitude','$longitude','$accuracy','$ip')");}
+// Organize data
+while($obj = mysql_fetch_object($result)){  
+	$table_result['data'][] = $obj; 
+}
 
 // Close database
 MYSQL_close($mysql_connection);
 
-$table_result = array();
 $table_result['result'] = "ok";
 echo json_encode($table_result);
 ?>	

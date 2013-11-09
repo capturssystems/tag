@@ -1,45 +1,195 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Device Properties Example</title>
+<html lang="fr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" />
+    <title>Tag Alpha</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>	
+	<!--<script type="text/javascript" src="js/jquery.mobile-1.4.0-rc.1.min.js"></script>	-->
+	<script src="phonegap.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=true"></script>
+	<script language="Javascript">
+		// Init variables
+		var map;
+		var pos;
+		var longitude;
+		var latitude;
+		var accuracy;
+		var tags;
+	</script>
 
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-    <script type="text/javascript" charset="utf-8">
+</head>
+  
+<body>
+<div id="content">
+	<div id="general" class="row-fluid">
+		<div class="text-center span12">
+			<form id="form_send" style="display:none;">
+				<p>Send a message</p>              
+				<textarea id="form_message" name="form_message">your message</textarea>
+				<BR>
+				<input id="form_send_button" type="submit" value="Send" class="btn btn-primary">
+				<!--<div><input id="form_test_button" value="Test position" class="btn btn-primary">-->
+			</form>
+			<div id="wait">Waiting position acquisition ...</div>
+			<div id="invalid_1" style="display:none;">Device not compatible with geolocalisation !</div>
+			<div id="invalid_2" style="display:none;">Capture of the position failed !</div>
+			<div id="result"></div>
+			<!--<div>Latitude: <span id="lat"></span><BR>Longitude: <span id="lng"></span></div>-->
+			<div id="map_canvas" style="width: 100%;height:100%;"></div>
+		</div>
+	</div>
+</div>
 
-    // Wait for Cordova to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
+<SCRIPT language="Javascript">
 
-    // Cordova is ready
-    //
-    function onDeviceReady() {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
-    }
+function Search_position(){
+	console.log("search position");
+	if(navigator.geolocation){
+		console.log("geolocalization well managed !");
+		//alert("try compute pos");
+		navigator.geolocation.getCurrentPosition(Position_success, Position_fail,{timeout: 5000,enableHighAccuracy: true });
+	}
+	else{
+		console.log("geolocalization not managed !");
+		$('#wait').hide();
+		$('#invalid_1').show();
+	}
+}
 
-    // onSuccess Geolocation
-    //
-    function onSuccess(position) {
-        var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-                            'Longitude: '          + position.coords.longitude             + '<br />' +
-                            'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            'Heading: '            + position.coords.heading               + '<br />' +
-                            'Speed: '              + position.coords.speed                 + '<br />' +
-                            'Timestamp: '          + position.timestamp                    + '<br />';
-    }
+function Position_fail(error){
+	console.log("position failed:"+error.code);
+	//alert("fail compute pos");
+	$('#wait').hide();
+	$('#invalid_2').show();
+}
 
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
-    }
+function Position_success(position){
+	console.log("position found");
+	latitude = position.coords.latitude;
+	longitude = position.coords.longitude;
+	accuracy = position.coords.accuracy;
+	pos = position.coords;
+	Enable_geoloc_features();
+}
 
-    </script>
-  </head>
-  <body>
-    <p id="geolocation">Finding geolocation...</p>
-  </body>
-</html>
+function Enable_geoloc_features(){
+	$('#wait').hide();
+	$('#form_send').show();
+	
+	myLocation = new google.maps.LatLng(latitude,longitude);
+	map  = new google.maps.Map(document.getElementById('map_canvas'),
+		{
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			center: myLocation,
+			zoom: 15
+		});
+	
+	Get_markers();
+	Display_position();
+	//google.maps.event.trigger(map,'resize');
+}
+
+function Get_markers(){
+	// Retrieve all markers from database
+	//var L_locations = new Array();
+	//L_locations = [["marker1",43.637,1.45],["marker1",43.64,1.44]];
+	var L_file_ajax = "http://www.net-brothers.com/tag/ajax/get_tags.php";
+	var jqxhr = $	.ajax({type:"GET",url:L_file_ajax})
+					.done(function(IN_result){
+						$('#result').text("Tags retrieved successfully!");
+						var L_result = jQuery.parseJSON(IN_result);
+						tags = L_result["data"];
+
+						Display_markers();
+						})
+					.fail(function(){$('#result').text("Tags retrieve failed!");})
+}
+
+function Display_position(){
+	// Display the position marker
+	var positionMarkerImage = new google.maps.MarkerImage('img/position_marker_green.png');
+	var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(latitude,longitude),
+			map: map,
+			icon: positionMarkerImage
+			});
+	var infowindow = new google.maps.InfoWindow({content: 'Your position'});
+	google.maps.event.addListener(marker, 'click', function() {
+    	infowindow.open(map,marker);
+	});
+}
+
+function Display_markers(){
+	// Display the tag markers
+	var tagMarkerImage = new google.maps.MarkerImage('img/tag_marker_pink.png');
+	var infowindow = new google.maps.InfoWindow(), marker, i;
+
+	for (i=0;i<tags.length; i++){  
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(tags[i]['latitude'], tags[i]['longitude']),
+			map: map,
+			icon: tagMarkerImage,
+			title: tags[i]['date']
+			});
+				
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infoWindow.setContent(tabs[i]['content']);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
+		
+		
+	}
+}
+
+/*function Update_position_maps(IN_latitude,IN_longitude){
+	console.log("update position: lat="+IN_latitude+" / long="+IN_longitude);
+	myLocation = new google.maps.LatLng(IN_latitude,IN_longitude);
+	map.panTo(myLocation);
+}*/
+
+// Function send message
+function Send_message(){	
+	// definition of ajax data
+	var L_file_ajax = "http://www.net-brothers.com/tag/ajax/send_message.php";
+	var L_data = {};
+	L_data['message']= $('#form_message').val();
+	L_data['latitude']= latitude;
+	L_data['longitude']= longitude;
+	L_data['accuracy']= accuracy;
+	
+	// ajax request
+	var jqxhr = $	.ajax({type:"GET",url:L_file_ajax,data:L_data})
+					.done(function(IN_result){$('#result').text("Message sent successfully!");})
+					.fail(function(){$('#result').text("Message sending failed !");})
+}
+
+// ---- Main ---- //
+// Init application
+//document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
+Init_application(); // DEBUG: de-comment
+
+function Init_application(){
+	jQuery(window).ready(function(){
+		
+		// Init Position
+		Search_position(); // DEBUG : comment
+		//longitude = 1;// DEBUG: de-comment
+		//latitude = 43;// DEBUG: de-comment
+		//accuracy = 1000;// DEBUG: de-comment
+		//Enable_geoloc_features(); //DEBUG: de-comment
+		
+		// Activate interactivity
+		$('#form_send').submit(function(e){
+			e.preventDefault(); // de-activate hmtl action of the form
+			Send_message(); // launch custom submit action
+		});
+	});
+}
+
+//google.maps.event.addDomListener(window, 'load', Init_maps);
+
+</SCRIPT>
+</body>
+</html>	
