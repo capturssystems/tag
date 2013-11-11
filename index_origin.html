@@ -11,8 +11,8 @@
 		// Init variables
 		var map;
 		var pos;
-		var longitude = 1.4;
-		var latitude = 43.4;
+		var longitude;
+		var latitude;
 		var accuracy;
 		var tags;
 	</script>
@@ -23,6 +23,18 @@
 <div id="content">
 	<div id="general" class="row-fluid">
 		<div class="text-center span12">
+			<form id="form_send" style="display:none;">
+				<p>Send a message</p>              
+				<textarea id="form_message" name="form_message">your message</textarea>
+				<BR>
+				<input id="form_send_button" type="submit" value="Send" class="btn btn-primary">
+				<!--<div><input id="form_test_button" value="Test position" class="btn btn-primary">-->
+			</form>
+			<div id="wait">Waiting position acquisition ...</div>
+			<div id="invalid_1" style="display:none;">Device not compatible with geolocalisation !</div>
+			<div id="invalid_2" style="display:none;">Capture of the position failed !</div>
+			<div id="result"></div>
+			<!--<div>Latitude: <span id="lat"></span><BR>Longitude: <span id="lng"></span></div>-->
 			<div id="map_canvas" style="width: 100%;height:100%;"></div>
 		</div>
 	</div>
@@ -30,7 +42,7 @@
 
 <SCRIPT language="Javascript">
 
-/*function Search_position(){
+function Search_position(){
 	console.log("search position");
 	if(navigator.geolocation){
 		console.log("geolocalization well managed !");
@@ -59,13 +71,24 @@ function Position_success(position){
 	accuracy = position.coords.accuracy;
 	pos = position.coords;
 	Enable_geoloc_features();
-}*/
-	
+}
 
+function Enable_geoloc_features(){
+	$('#wait').hide();
+	$('#form_send').show();
 	
-//Get_markers();
-//Display_position();
+	myLocation = new google.maps.LatLng(latitude,longitude);
+	map  = new google.maps.Map(document.getElementById('map_canvas'),
+		{
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			center: myLocation,
+			zoom: 15
+		});
+	
+	Get_markers();
+	Display_position();
 	//google.maps.event.trigger(map,'resize');
+}
 
 function Get_markers(){
 	// Retrieve all markers from database
@@ -120,6 +143,28 @@ function Display_markers(){
 	}
 }
 
+/*function Update_position_maps(IN_latitude,IN_longitude){
+	console.log("update position: lat="+IN_latitude+" / long="+IN_longitude);
+	myLocation = new google.maps.LatLng(IN_latitude,IN_longitude);
+	map.panTo(myLocation);
+}*/
+
+// Function send message
+function Send_message(){	
+	// definition of ajax data
+	var L_file_ajax = "http://www.net-brothers.com/tag/ajax/send_message.php";
+	var L_data = {};
+	L_data['message']= $('#form_message').val();
+	L_data['latitude']= latitude;
+	L_data['longitude']= longitude;
+	L_data['accuracy']= accuracy;
+	
+	// ajax request
+	var jqxhr = $	.ajax({type:"GET",url:L_file_ajax,data:L_data})
+					.done(function(IN_result){$('#result').text("Message sent successfully!");})
+					.fail(function(){$('#result').text("Message sending failed !");})
+}
+
 // ---- Main ---- //
 // Init application
 //document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
@@ -127,14 +172,19 @@ Init_application(); // DEBUG: de-comment
 
 function Init_application(){
 	jQuery(window).ready(function(){
-	
-		myLocation = new google.maps.LatLng(latitude,longitude);
-		map  = new google.maps.Map(document.getElementById('map_canvas'),
-			{
-				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				center: myLocation,
-				zoom: 15
-			});
+		
+		// Init Position
+		Search_position(); // DEBUG : comment
+		//longitude = 1;// DEBUG: de-comment
+		//latitude = 43;// DEBUG: de-comment
+		//accuracy = 1000;// DEBUG: de-comment
+		//Enable_geoloc_features(); //DEBUG: de-comment
+		
+		// Activate interactivity
+		$('#form_send').submit(function(e){
+			e.preventDefault(); // de-activate hmtl action of the form
+			Send_message(); // launch custom submit action
+		});
 	});
 }
 
