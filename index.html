@@ -122,12 +122,11 @@ function Display_markers(){
 
 // ---- Main ---- //
 // Init application
-document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
-//Init_application(); // DEBUG: de-comment
 
 function Init_application(){
 	jQuery(window).ready(function(){
 	
+		alert("begin init:"+latitude+" / "+longitude);
 		myLocation = new google.maps.LatLng(latitude,longitude);
 		map  = new google.maps.Map(document.getElementById('map_canvas'),
 			{
@@ -135,8 +134,14 @@ function Init_application(){
 				center: myLocation,
 				zoom: 15
 			});
+		alert("end init");
+
 	});
 }
+alert("start");
+document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
+//Init_application(); // DEBUG: de-comment
+alert("end");
 
 //google.maps.event.addDomListener(window, 'load', Init_maps);
 
