@@ -8,7 +8,7 @@
         Ludovic
     </author>
 
-    <content src="index.html" />
+    <content src="index_maps.html" />
     <access origin="*" />
    
     <preference name="fullscreen" value="true" />

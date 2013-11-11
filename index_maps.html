@@ -1,0 +1,145 @@
+<html lang="fr">
+<head>
+	<meta http-equiv="Content-Type" content="text/html" />
+    <title>Tag Alpha</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+	<script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>	
+	<!--<script type="text/javascript" src="js/jquery.mobile-1.4.0-rc.1.min.js"></script>	-->
+	<script src="phonegap.js"></script>
+	<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3&sensor=true"></script>
+	<script language="Javascript">
+		// Init variables
+		var map;
+		var pos;
+		var longitude = 1.4;
+		var latitude = 43.4;
+		var accuracy;
+		var tags;
+	</script>
+
+</head>
+  
+<body>
+<div id="content">
+	<div id="general" class="row-fluid">
+		<div class="text-center span12">
+			<div id="map_canvas" style="width: 100%;height:100%;"></div>
+		</div>
+	</div>
+</div>
+
+<SCRIPT language="Javascript">
+
+/*function Search_position(){
+	console.log("search position");
+	if(navigator.geolocation){
+		console.log("geolocalization well managed !");
+		alert("try compute pos");
+		navigator.geolocation.getCurrentPosition(Position_success, Position_fail,{timeout: 5000,enableHighAccuracy: true });
+	}
+	else{
+		console.log("geolocalization not managed !");
+		$('#wait').hide();
+		$('#invalid_1').show();
+	}
+}
+
+function Position_fail(error){
+	console.log("position failed:"+error.code);
+	alert("fail compute pos");
+	$('#wait').hide();
+	$('#invalid_2').show();
+}
+
+function Position_success(position){
+	alert("position ok");
+	console.log("position found");
+	latitude = position.coords.latitude;
+	longitude = position.coords.longitude;
+	accuracy = position.coords.accuracy;
+	pos = position.coords;
+	Enable_geoloc_features();
+}*/
+	
+
+	
+//Get_markers();
+//Display_position();
+	//google.maps.event.trigger(map,'resize');
+
+function Get_markers(){
+	// Retrieve all markers from database
+	//var L_locations = new Array();
+	//L_locations = [["marker1",43.637,1.45],["marker1",43.64,1.44]];
+	var L_file_ajax = "http://www.net-brothers.com/tag/ajax/get_tags.php";
+	var jqxhr = $	.ajax({type:"GET",url:L_file_ajax})
+					.done(function(IN_result){
+						var L_result = jQuery.parseJSON(IN_result);
+						tags = L_result["data"];
+
+						Display_markers();
+						})
+					.fail(function(){})
+}
+
+function Display_position(){
+	// Display the position marker
+	var positionMarkerImage = new google.maps.MarkerImage('img/position_marker_green.png');
+	var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(latitude,longitude),
+			map: map,
+			icon: positionMarkerImage
+			});
+	var infowindow = new google.maps.InfoWindow({content: 'Your position'});
+	google.maps.event.addListener(marker, 'click', function() {
+    	infowindow.open(map,marker);
+	});
+}
+
+function Display_markers(){
+	// Display the tag markers
+	var tagMarkerImage = new google.maps.MarkerImage('img/tag_marker_pink.png');
+	var infowindow = new google.maps.InfoWindow(), marker, i;
+
+	for (i=0;i<tags.length; i++){  
+		var marker = new google.maps.Marker({
+			position: new google.maps.LatLng(tags[i]['latitude'], tags[i]['longitude']),
+			map: map,
+			icon: tagMarkerImage,
+			title: tags[i]['date']
+			});
+				
+        google.maps.event.addListener(marker, 'click', (function(marker, i) {
+            return function() {
+                infoWindow.setContent(tabs[i]['content']);
+                infoWindow.open(map, marker);
+            }
+        })(marker, i));
+		
+		
+	}
+}
+
+// ---- Main ---- //
+// Init application
+//document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
+Init_application(); // DEBUG: de-comment
+
+function Init_application(){
+	jQuery(window).ready(function(){
+	
+		myLocation = new google.maps.LatLng(latitude,longitude);
+		map  = new google.maps.Map(document.getElementById('map_canvas'),
+			{
+				mapTypeId: google.maps.MapTypeId.ROADMAP,
+				center: myLocation,
+				zoom: 15
+			});
+	});
+}
+
+//google.maps.event.addDomListener(window, 'load', Init_maps);
+
+</SCRIPT>
+</body>
+</html>	
