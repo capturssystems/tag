@@ -67,7 +67,7 @@ function Position_success(position){
 //Display_position();
 	//google.maps.event.trigger(map,'resize');
 
-function Get_markers(){
+/*function Get_markers(){
 	// Retrieve all markers from database
 	//var L_locations = new Array();
 	//L_locations = [["marker1",43.637,1.45],["marker1",43.64,1.44]];
@@ -118,12 +118,12 @@ function Display_markers(){
 		
 		
 	}
-}
+}*/
 
 // ---- Main ---- //
 // Init application
-//document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
-Init_application(); // DEBUG: de-comment
+document.addEventListener("deviceready", Init_application, false); // DEBUG: comment
+//Init_application(); // DEBUG: de-comment
 
 function Init_application(){
 	jQuery(window).ready(function(){
